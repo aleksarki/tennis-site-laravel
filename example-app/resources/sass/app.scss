@@ -1,0 +1,75 @@
+@import "custom";
+//@import "~bootstrap/scss/bootstrap";
+//@import "node_modules/bootstrap/scss/bootstrap";
+
+@import "bootstrap/scss/_functions.scss";
+@import "bootstrap/scss/_variables.scss";
+
+$grid-breakpoints: (
+  xxs: 0,
+  xs: 500px,
+  sm: 667px,
+  md: 768px,
+  lg: 1000px,
+  xl: 1200px,
+  xxl: 1500px,
+  x3l: 1700px
+);
+
+$container-max-widths: (
+  xxs: 400px,
+  xs: 500px,
+  sm: 667px,
+  md: 768px,
+  lg: 1000px,
+  xl: 1200px,
+  xxl: 1500px,
+  x3l: 1700px
+);
+
+@import "bootstrap";
+
+
+$colorSet: #56c7fa, #f76540, #ffcb05, #62cd9f, #b67baa;
+//$colorSet: $cyan, $red, $yellow, $green, #b67baa;
+$colorSetLength: length($colorSet);
+$colorSetDark: darken(#56c7fa, 40),  darken(#f76540, 40),  darken(#ffcb05, 40),  darken(#62cd9f, 40),  darken(#b67baa, 40);
+$colorSetDarkLength: length($colorSetDark);
+
+
+.col {
+  padding-bottom: 30px;
+
+  @for $i from 1 through $colorSetLength {
+    &:nth-of-type(#{$colorSetLength}n+#{$i}) > .card {
+        @include paint(nth($colorSetDark, $i), nth($colorSet, $i));
+        @include box(2px solid nth($colorSetDark, $i), 10px);
+    }
+  }
+
+  .card {
+    height: 100%;
+
+    img {
+      object-fit: cover;
+      height: 500px;
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform:rotate(0deg);
+  }
+  100% {
+    transform:rotate(360deg);
+  }
+}
+
+.rotating {
+  animation-name: rotation;
+  animation-duration: 0.75s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
