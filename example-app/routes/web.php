@@ -15,12 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [AppController::class, 'index']);
+/*Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');*/
 
-Route::get('/rackets', [RacketController::class, 'index']);
-Route::get('/rackets/create', [RacketController::class,'create']);
-Route::post('/rackets', [RacketController::class, 'store']);
-Route::get('/rackets/{racket}', [RacketController::class, 'show']);
-Route::get('/rackets/{racket}/edit', [RacketController::class, 'edit']);
-Route::put('/rackets/{racket}', [RacketController::class, 'update']);
-Route::delete('/rackets/{racket}', [RacketController::class, 'destroy']);
+require __DIR__.'/auth.php';
+
+Route::get('/', [AppController::class, 'index']);
+Route::get('/users', [AppController::class,'index_users'])->middleware('auth');
+
+Route::get('/rackets', [RacketController::class, 'index'])->middleware('auth');
+Route::get('/rackets/user/{user:name}', [RacketController::class, 'index_user'])->middleware('auth');
+Route::get('/rackets/create', [RacketController::class,'create'])->middleware('auth');
+Route::post('/rackets', [RacketController::class, 'store'])->middleware('auth');
+Route::get('/rackets/{racket}', [RacketController::class, 'show'])->middleware('auth');
+Route::get('/rackets/{racket}/edit', [RacketController::class, 'edit'])->middleware('auth');
+Route::put('/rackets/{racket}', [RacketController::class, 'update'])->middleware('auth');
+Route::delete('/rackets/{racket}', [RacketController::class, 'destroy'])->middleware('auth');
+Route::put('/rackets/{racket}/restore', [RacketController::class, 'restore'])->middleware('auth');
+Route::delete('/rackets/{racket}/force', [RacketController::class, 'force_delete'])->middleware('auth');

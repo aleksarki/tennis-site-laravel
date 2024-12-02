@@ -19,6 +19,10 @@ body {
   margin: 40px 20px 20px 40px;
 }
 
+.content-text {
+  margin: 40px 20px 20px 40px;
+}
+
 .type {
   position: absolute;
   right: 10px;

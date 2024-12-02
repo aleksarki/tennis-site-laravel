@@ -1,6 +1,8 @@
 require('./bootstrap');
 //import './scss/styles.scss';
 //import 'bootstrap';
+require('alpinejs');
+
 
 const bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 

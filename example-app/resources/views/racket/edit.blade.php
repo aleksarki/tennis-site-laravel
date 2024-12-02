@@ -14,7 +14,7 @@
 
         <div class="title">
             <span>Редактировать: {{ $racket->name }}</span>
-            <a class="btn btn-light" href="/rackets">Назад</a>
+            <a class="btn btn-light" href="/rackets/user/{{ Auth::id() }}">Назад</a>
         </div>
 
         

@@ -2,14 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use \App\Models\Racket;
+use \App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class RacketController extends Controller
 {
     public function index()
     {
-        $rackets = \App\Models\Racket::all();
-        return view("racket.index", compact("rackets"));
+        $rackets = Racket::all();
+        $view = true;
+
+        $user = Auth::user();
+        $user->is_admin ? $trashed = Racket::onlyTrashed()->get() : $trashed = null;
+
+        return view("racket.index", compact("rackets", 'view', 'trashed', 'user'));
+    }
+
+    public function index_user(User $user)
+    {
+        $rackets = Racket::where("user_id", $user->id)->get();
+        $view = false;
+        return view("racket.index", compact("user", "rackets", 'view'));
     }
 
     public function create()
@@ -37,29 +53,41 @@ class RacketController extends Controller
 
         $data["image"] = $file->getClientOriginalName();
 
-        \App\Models\Racket::create($data);
+        $user_id = Auth::id();
+        $data["user_id"] = $user_id;
 
-        return redirect('/rackets');
+        Racket::create($data);
+        
+        $user = Auth::id();
+
+        return redirect("/rackets/user/$user_id");
     }
 
-    public function show($id)
+    public function show(Racket $racket)
     {
-        $racket = \App\Models\Racket::findOrFail($id);
-        return view('racket.show', compact('racket'));
+        $user = User::findOrFail($racket->user_id);
+        return view('racket.show', compact('racket', 'user'));
     }
 
-    public function edit($id)
+    public function edit(Racket $racket)
     {
-        $racket = \App\Models\Racket::findOrFail($id);
+        if (!Gate::allows('edit-racket', $racket)) {
+            abort(403);
+        }
+
         return view('racket.edit', compact('racket'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Racket $racket)
     {
+        if (!Gate::allows('edit-racket', $racket)) {
+            abort(403);
+        }
+
         $data = request()->validate([
             "name" => "required",
             "country" => "required",
-            "image"=> "required",
+            "image"=> "",
             "bdate" => "required|date",
             "title" => "required",
             "family" => "",
@@ -67,23 +95,60 @@ class RacketController extends Controller
             "game" => "",
         ]);
 
-        $file = $request->file('image');
-        $destinationPath = 'images/';
-        $originalFile = $file->getClientOriginalName();
-        $file->move($destinationPath, $originalFile);
 
-        $data["image"] = $file->getClientOriginalName();
+        if (!isset($data["image"])) {
+            $data["image"] = $racket->image;
+        }
+        else {
+            $file = $request->file('image');
+            $destinationPath = 'images/';
 
-        $racket = \App\Models\Racket::findOrFail($id);
+            $originalFile = $file->getClientOriginalName();
+            $file->move($destinationPath, $originalFile);
+
+            $data["image"] = $file->getClientOriginalName();
+        }
+
         $racket->update($data);
+
+        $user = Auth::id();
+
+        return redirect("/rackets/user/$user");
+    }
+
+    public function destroy(Racket $racket)
+    {
+        if (!Gate::allows('soft-delete-racket', $racket)) {
+            abort(403);
+        }
+
+        $racket->delete();
+
+        $user = Auth::id();
+
+        return redirect("/rackets/user/$user");
+    }   
+
+    public function restore(Request $request, $id)
+    {
+        if (!Gate::allows('restore-racket')) {
+            abort(403);
+        }
+
+        $racket = Racket::onlyTrashed()->find($id);
+        $racket->restore();
 
         return redirect('/rackets');
     }
 
-    public function destroy($id)
+    public function force_delete($id)
     {
-        $racket = \App\Models\Racket::findOrFail($id);
-        $racket->delete();
+        if (!Gate::allows('restore-racket')) {
+            abort(403);
+        }
+        
+        $racket = Racket::onlyTrashed()->find($id);
+        $racket->forceDelete();
         return redirect('/rackets');
     }
 }

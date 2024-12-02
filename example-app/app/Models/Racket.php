@@ -6,6 +6,7 @@ use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Racket extends Model
 {
@@ -13,6 +14,41 @@ class Racket extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+
+    protected static function booted()
+    {
+        
+        static::updating(function ($racket) {
+            $user = Auth::user();
+
+            if (($user->id != $racket->user_id) && (!$user->is_admin)) {
+                abort(403);
+            }
+        });
+
+        static::deleting(function ($racket) {
+            $user = Auth::user();
+
+            if (($user->id != $racket->user_id) && (!$user->is_admin)) {
+                abort(403);
+            }
+            
+        });
+
+        static::restoring(function ($racket) {
+            $user = Auth::user();
+            
+            if (!$user->is_admin) {
+                abort(403);
+            }
+        });
+        
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     // дата рождения
     public function getBdateAttribute($value)

@@ -21,6 +21,10 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-body">
+                    <p>
+                        Пользователь:
+                        <a href="/rackets/user/{{ $user->name}}" class="link-success link-underline link-underline-opacity-0"> {{ $user->name }}</a>
+                    </p>
                     <div class="family" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Информация о семье">{{ $racket->family }}</div><br>
                     <div class="other" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Общие сведения">{{ $racket->other }}</div><br>
                     <div class="game" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Информация об игре">{{ $racket->game }}</div>
