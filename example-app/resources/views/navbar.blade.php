@@ -28,7 +28,7 @@
                         @else
                             Пользователь:
                         @endif
-                        {{ Auth::user()->name }}
+                        <a href="/rackets/user/{{ Auth::user()->name }}" class="link-light link-underline-opacity-0">{{ Auth::user()->name }}</a>
                     </span>
 
                     <form method="POST" action="{{ route('logout') }}">

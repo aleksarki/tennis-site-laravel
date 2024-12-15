@@ -22,11 +22,21 @@
         <div class="content-text">
             <ul style="list-style-type: none;">
                 @foreach ($users as $user)
-                    @if (Auth::id() == $user->id)
-                        <li><a href="/rackets/user/{{ $user->name }}" class="link-secondary link-offset-2 link-underline-opacity-50 link-underline-opacity-75-hover">{{ $user->name }}</a></li>
-                    @else
-                        <li><a href="/rackets/user/{{ $user->name }}" class="link-success link-underline-opacity-0 link-underline">{{ $user->name }}</a></li>
-                    @endif
+                    <li>
+                        <a href="/rackets/user/{{ $user->name }}" class="{{ App\Models\User::link_color($user) }}">{{ $user->name }}</a>
+                        @if ($user->id != Auth::id())
+                            @if (!Auth::user()->friends_with($user))
+                                <a class="btn btn-light btn-sm" href="/users/{{ Auth::id() }}/befriend/{{ $user->id }}">Подружиться</a>
+                            @endif
+                            @if (!Auth::user()->subscribed_to($user))
+                                <a class="btn btn-light btn-sm" href="/users/{{ Auth::id() }}/subscribe/{{ $user->id }}">Подписаться</a>
+                            @endif
+                            @if (Auth::user()->friends_with($user) || Auth::user()->subscribed_to($user))
+                                <a class="btn btn-light btn-sm" href="/users/{{ Auth::id() }}/unsubscribe/{{ $user->id }}">Отписаться</a>
+                            @endif
+                        @endif
+                        <br><br>
+                    </li>
                 @endforeach
             </ul>
         </div>

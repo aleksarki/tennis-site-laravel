@@ -24,11 +24,13 @@
             </span>
         </div>
 
+        
         @if (!$view && Auth::id() == $user->id)
             <div class="content-text">
                 <a class="btn btn-light" href="/rackets/create">Добавить объект</a>
             </div>
         @endif
+
 
         <div class="container">
             <div class="row row-cols-xxs-1 row-cols-xs-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-3 row-cols-x3l-4">
@@ -37,11 +39,7 @@
                     <div class="col">
                         <div class="card">
                             <span class="type">
-                                @if (Auth::id() == $racket->user_id)
-                                    <a href="/rackets/user/{{ App\Models\User::find($racket->user_id)->name }}" class="link-secondary link-offset-2 link-underline-opacity-50 link-underline-opacity-75-hover">{{ App\Models\User::find($racket->user_id)->name }}</a>
-                                @else
-                                    <a href="/rackets/user/{{ App\Models\User::find($racket->user_id)->name }}" class="link-success link-underline-opacity-0 link-underline">{{ App\Models\User::find($racket->user_id)->name }}</a>
-                                @endif
+                                <a href="/rackets/user/{{ $racket->user->name }}" class="{{ App\Models\User::link_color($racket->user) }}">{{ $racket->user->name }}</a>
                             </span>
                             <img src="/images/{{ $racket->image }}" class="card-img-top img-fluid" alt="/images/{{ $racket->image }}">
                             <div class="card-body">
@@ -53,14 +51,15 @@
                                 </p>
                             </div>
                             <div class="card-footer fs-3">
-                                <a class="btn btn-light" href="/rackets/{{ $racket->id }}">Подробно</a>
+                                <a class="btn btn-light btn-sm" href="/rackets/{{ $racket->id }}">Подробно</a>
+                                <a class="btn btn-light btn-sm" href="/rackets/{{ $racket->id }}/comments">Комментарии</a>
 
                                 @if (Auth::id() == $racket->user_id || Auth::user()->is_admin)
-                                    <a class="btn btn-light" href="/rackets/{{ $racket->id }}/edit">Редактировать</a>
+                                    <a class="btn btn-light btn-sm" href="/rackets/{{ $racket->id }}/edit">Редактировать</a>
                                     <form action="/rackets/{{ $racket->id }}" method="post">
                                         @method('DELETE')
                                         @csrf
-                                        <button class="btn btn-light">Удалить</butto>
+                                        <button class="btn btn-light btn-sm">Удалить</butto>
                                     </form>
                                 @endif
                             </div>
@@ -75,6 +74,7 @@
             </div>
         </div>
 
+
         @isset ($trashed)
             <div class="content-text">Удалённые</div>
 
@@ -85,11 +85,7 @@
                         <div class="col">
                             <div class="card">
                                 <span class="type">
-                                    @if (Auth::id() == $racket->user_id)
-                                        <a href="/rackets/user/{{ App\Models\User::find($racket->user_id)->name }}" class="link-secondary link-offset-2 link-underline-opacity-50 link-underline-opacity-75-hover">{{ App\Models\User::find($racket->user_id)->name }}</a>
-                                    @else
-                                        <a href="/rackets/user/{{ App\Models\User::find($racket->user_id)->name }}" class="link-success link-underline-opacity-0 link-underline">{{ App\Models\User::find($racket->user_id)->name }}</a>
-                                    @endif
+                                    <a href="/rackets/user/{{ $racket->user->name }}" class="{{ App\Models\User::link_color($racket->user) }}">{{ $racket->user->name }}</a>
                                 </span>
                                 <img src="/images/{{ $racket->image }}" class="card-img-top img-fluid" alt="/images/{{ $racket->image }}">
                                 <div class="card-body">
@@ -104,13 +100,13 @@
                                     <form action="/rackets/{{ $racket->id }}/restore" method="post" enctype="multipart/form-data">
                                         @method('PUT')
                                         @csrf
-                                        <button class="btn btn-light">Восстановить</button>
+                                        <button class="btn btn-light btn-sm">Восстановить</button>
                                     </form>
 
                                     <form action="/rackets/{{ $racket->id }}/force" method="post">
                                         @method('DELETE')
                                         @csrf
-                                        <button class="btn btn-light">Удалить без возврата</butto>
+                                        <button class="btn btn-light btn-sm">Удалить без возврата</butto>
                                     </form>
                                 </div>
                             </div>
@@ -124,6 +120,7 @@
                 </div>
             </div>
         @endisset
+
 
         @include('footer')
 

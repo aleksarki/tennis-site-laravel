@@ -15,14 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');*/
-
 require __DIR__.'/auth.php';
 
 Route::get('/', [AppController::class, 'index']);
+Route::get('/feed', [AppController::class, 'feed']);
+
 Route::get('/users', [AppController::class,'index_users'])->middleware('auth');
+Route::get('/users/{user}/befriend/{other}', [AppController::class, 'befriend_users'])->middleware('auth');
+Route::get('/users/{user}/subscribe/{other}', [AppController::class, 'subscribe_user'])->middleware('auth');
+Route::get('/users/{user}/unsubscribe/{other}', [AppController::class, 'unsubscribe_user'])->middleware('auth');
 
 Route::get('/rackets', [RacketController::class, 'index'])->middleware('auth');
 Route::get('/rackets/user/{user:name}', [RacketController::class, 'index_user'])->middleware('auth');
@@ -34,3 +35,7 @@ Route::put('/rackets/{racket}', [RacketController::class, 'update'])->middleware
 Route::delete('/rackets/{racket}', [RacketController::class, 'destroy'])->middleware('auth');
 Route::put('/rackets/{racket}/restore', [RacketController::class, 'restore'])->middleware('auth');
 Route::delete('/rackets/{racket}/force', [RacketController::class, 'force_delete'])->middleware('auth');
+
+Route::get('/rackets/{racket}/comments', [RacketController::class, 'comments'])->middleware('auth');
+Route::get('/rackets/{racket}/comments/create', [RacketController::class, 'create_comment'])->middleware('auth');
+Route::post('/rackets/{racket}/comments', [RacketController::class, 'store_comment'])->middleware('auth');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use \App\Models\Racket;
 use \App\Models\User;
 use Illuminate\Http\Request;
@@ -64,10 +65,37 @@ class RacketController extends Controller
         return redirect("/rackets/user/$user_name");
     }
 
+    public function create_comment(Racket $racket)
+    {
+        return view('racket.new_comment', compact('racket'));
+    }
+
+    public function store_comment(Request $request, Racket $racket)
+    {
+        $data = $request->validate([
+            "text" => "required"
+        ]);
+
+        Comment::create([
+            "text" => $data["text"],
+            "user_id" => Auth::id(),
+            "racket_id" => $racket->id
+        ]);
+
+        $racket_id = $racket->id;
+
+        return redirect("/rackets/$racket_id/comments");
+    }
+
     public function show(Racket $racket)
     {
         $user = User::findOrFail($racket->user_id);
         return view('racket.show', compact('racket', 'user'));
+    }
+
+    public function comments(Racket $racket)
+    {
+        return view('racket.comments', compact('racket'));
     }
 
     public function edit(Racket $racket)

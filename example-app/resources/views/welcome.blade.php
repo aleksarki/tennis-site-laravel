@@ -26,6 +26,7 @@
                 <div class="content-text">
                     <a href="/rackets" class="btn btn-outline-success">Первые ракетки мира</a><br><br>
                     <a href="/users" class="btn btn-outline-success">Пользователи</a><br><br>
+                    <a href="/feed" class="btn btn-outline-success">Лента</a><br><br>
                 </div>
             @else
                 <span class="content-text">Войдите для доступа к содержимому сайта</span><br><br>
