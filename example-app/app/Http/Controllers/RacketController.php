@@ -58,9 +58,10 @@ class RacketController extends Controller
 
         Racket::create($data);
         
-        $user = Auth::id();
+        $user = Auth::user();
+        $user_name = $user->name;
 
-        return redirect("/rackets/user/$user_id");
+        return redirect("/rackets/user/$user_name");
     }
 
     public function show(Racket $racket)
@@ -111,9 +112,10 @@ class RacketController extends Controller
 
         $racket->update($data);
 
-        $user = Auth::id();
+        $user = Auth::user();
+        $user_name = $user->name;
 
-        return redirect("/rackets/user/$user");
+        return redirect("/rackets/user/$user_name");
     }
 
     public function destroy(Racket $racket)
@@ -124,9 +126,10 @@ class RacketController extends Controller
 
         $racket->delete();
 
-        $user = Auth::id();
+        $user = Auth::user();
+        $user_name = $user->name;
 
-        return redirect("/rackets/user/$user");
+        return redirect("/rackets/user/$user_name");
     }   
 
     public function restore(Request $request, $id)
