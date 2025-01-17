@@ -28,6 +28,7 @@
         @if (!$view && Auth::id() == $user->id)
             <div class="content-text">
                 <a class="btn btn-light" href="/rackets/create">Добавить объект</a>
+                <a class="btn btn-light" href="/users/token">Токен доступа</a>
             </div>
         @endif
 
@@ -52,7 +53,7 @@
                             </div>
                             <div class="card-footer fs-3">
                                 <a class="btn btn-light btn-sm" href="/rackets/{{ $racket->id }}">Подробно</a>
-                                <a class="btn btn-light btn-sm" href="/rackets/{{ $racket->id }}/comments">Комментарии</a>
+                                <a class="btn btn-light btn-sm" href="/rackets/{{ $racket->id }}/comments">Комментариев: {{ count($racket->comments) }}</a>
 
                                 @if (Auth::id() == $racket->user_id || Auth::user()->is_admin)
                                     <a class="btn btn-light btn-sm" href="/rackets/{{ $racket->id }}/edit">Редактировать</a>

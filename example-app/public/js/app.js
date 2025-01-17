@@ -3771,6 +3771,19 @@ if (downloadButton) {
     toast.show();
   });
 }
+var copyTokenButton = document.getElementById('copyTokenButton');
+var copyTokenToast = document.getElementById('copyTokenToast');
+if (copyTokenButton) {
+  var _toast = bootstrap.Toast.getOrCreateInstance(copyTokenToast);
+  copyTokenButton.addEventListener('click', function () {
+    var tokenTextArea = document.getElementById('tokenTextArea');
+    tokenTextArea.select();
+    tokenTextArea.setSelectionRange(0, 99999);
+    console.log(document.execCommand('copy'));
+    tokenTextArea.setSelectionRange(0, 0);
+    _toast.show();
+  });
+}
 var infoModal = document.getElementById('infoModal');
 if (infoModal) {
   infoModal.addEventListener('show.bs.modal', function (event) {

@@ -158,7 +158,7 @@ class RacketController extends Controller
         $user_name = $user->name;
 
         return redirect("/rackets/user/$user_name");
-    }   
+    }
 
     public function restore(Request $request, $id)
     {

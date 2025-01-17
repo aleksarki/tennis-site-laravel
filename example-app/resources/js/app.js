@@ -18,6 +18,22 @@ if (downloadButton) {
 }
 
 
+const copyTokenButton = document.getElementById('copyTokenButton');
+const copyTokenToast = document.getElementById('copyTokenToast');
+
+if (copyTokenButton) {
+    const toast = bootstrap.Toast.getOrCreateInstance(copyTokenToast);
+    copyTokenButton.addEventListener('click', () => {
+        var tokenTextArea = document.getElementById('tokenTextArea');
+        tokenTextArea.select();
+        tokenTextArea.setSelectionRange(0, 99999);
+        console.log(document.execCommand('copy'));
+        tokenTextArea.setSelectionRange(0, 0);
+        toast.show();
+    });
+}
+
+
 const infoModal = document.getElementById('infoModal');
 
 if (infoModal) {

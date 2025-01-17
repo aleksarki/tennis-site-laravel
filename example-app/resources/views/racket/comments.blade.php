@@ -15,7 +15,7 @@
         <div class="title">
             <span>Комментарии: {{ $racket->name }} от</span>
             <a href="/rackets/user/{{ $racket->user->name}}" class="{{ App\Models\User::link_color($racket->user) }}"> {{ $racket->user->name }}</a>
-            <a class="btn btn-light" href="/rackets">Назад</a>
+            <a class="btn btn-light" href="{{ url()->previous() }}">Назад</a>
             <a class="btn btn-light" href="/rackets/{{ $racket-> id }}/comments/create">Новый комментарий</a>
             
             <ul class="list-group list-group-flush">

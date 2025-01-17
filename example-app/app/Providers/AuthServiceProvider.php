@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
 use App\Models\User;
 use App\Models\Racket;
 
@@ -26,6 +27,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        if ($this->app->routesAreCached()) {
+            Passport::routes();
+        }
 
         Gate::define('edit-racket', function (User $user, Racket $racket) {
             return $user->id == $racket->user_id || $user->is_admin;

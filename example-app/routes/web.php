@@ -24,6 +24,7 @@ Route::get('/users', [AppController::class,'index_users'])->middleware('auth');
 Route::get('/users/{user}/befriend/{other}', [AppController::class, 'befriend_users'])->middleware('auth');
 Route::get('/users/{user}/subscribe/{other}', [AppController::class, 'subscribe_user'])->middleware('auth');
 Route::get('/users/{user}/unsubscribe/{other}', [AppController::class, 'unsubscribe_user'])->middleware('auth');
+Route::get('/users/token', [AppController::class, 'show_token'])->middleware('auth');
 
 Route::get('/rackets', [RacketController::class, 'index'])->middleware('auth');
 Route::get('/rackets/user/{user:name}', [RacketController::class, 'index_user'])->middleware('auth');

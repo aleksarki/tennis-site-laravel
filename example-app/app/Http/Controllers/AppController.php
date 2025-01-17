@@ -28,8 +28,14 @@ class AppController extends Controller
         foreach ($subscribed_to as $t) {
             array_push($followed_ids, $t->friend_id);
         }
-        $rackets = Racket::whereIn("user_id", $followed_ids)->get();
+        $rackets = Racket::whereIn("user_id", $followed_ids)->get()->sortBy('created_at');
         return view('user.feed', compact('rackets'));
+    }
+
+    public function show_token()
+    {
+        $token = Auth::user()->createToken('The Tennis Site')->accessToken;
+        return view('user.token', compact('token'));
     }
 
     public function befriend_users(User $user, User $other)
